@@ -35,24 +35,48 @@
         </section>
     </main>
     <script>
-        // Basic AJAX form submission for better UX
-        document.getElementById('create-teacher-form').addEventListener('submit', function(e) {
+        document.getElementById('create-teacher-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const form = e.target;
-            const data = new FormData(form);
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const resultEl = document.getElementById('result-message');
 
-            fetch(form.action, {
-                method: 'POST',
-                body: data
-            })
-            .then(response => response.json())
-            .then(result => {
-                document.getElementById('result-message').textContent = result.message;
-                if(result.success) form.reset();
-            })
-            .catch(() => {
-                document.getElementById('result-message').textContent = "Error creating account.";
-            });
+            submitBtn.disabled = true;
+            resultEl.textContent = 'Creating account...';
+
+            try {
+                const resp = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form)
+                });
+
+                const raw = await resp.text(); // read raw response for diagnostics
+                let payload = null;
+                try {
+                    payload = JSON.parse(raw); // try parse JSON
+                } catch (parseErr) {
+                    // not JSON — keep raw for message
+                }
+
+                if (!resp.ok) {
+                    console.error('Server returned error', resp.status, raw);
+                    resultEl.textContent = (payload && payload.message) ? payload.message : `Server error: ${resp.status}`;
+                } else {
+                    if (payload) {
+                        resultEl.textContent = payload.message || 'Success';
+                        if (payload.success) form.reset();
+                    } else {
+                        // server returned plain text / HTML (common when PHP has warnings)
+                        console.warn('Non-JSON response from server:', raw);
+                        resultEl.textContent = raw || 'Account created (no JSON response)';
+                    }
+                }
+            } catch (err) {
+                console.error('Fetch failed', err);
+                resultEl.textContent = `Request failed: ${err.message}`;
+            } finally {
+                submitBtn.disabled = false;
+            }
         });
     </script>
 </body>
