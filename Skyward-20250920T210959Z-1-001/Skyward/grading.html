@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grading - Skyward Student Access</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            min-height: 100vh;
+            color: #e0e7ff;
+        }
+        .header {
+            background: #1e3a8a;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .header-left a {
+            display: inline-block;
+            padding: 0.25rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .header-left a:hover {
+            background: #2563eb;
+        }
+        .header-left img {
+            width: 50px;
+            margin-right: 1rem;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        .header-right a {
+            color: #93c5fd;
+            margin-left: 1rem;
+            text-decoration: none;
+        }
+        .header-right a:hover {
+            text-decoration: underline;
+        }
+        .nav {
+            background: #2a5298;
+            padding: 0.5rem;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .details {
+            background: #2a5298;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 1rem;
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #2a5298;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #4b6cb7;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background: #1e3a8a;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            background: #3b82f6;
+            color: #e0e7ff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        @media (max-width: 768px) {
+            .content {
+                padding: 1rem;
+            }
+            table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <a href="#" onclick="window.location.href='dashboard.html';">
+                <img src="placeholder.jpg" alt="Skyward Logo">
+            </a>
+            <span>Triad High School - 7000</span>
+        </div>
+        <div class="header-right">
+            <span id="userName"></span>
+            <a href="#">🔔 What's New</a>
+            <a href="#">✉️ My Messages</a>
+            <a href="#">✔️ My Tasks</a>
+            <a href="#">❓ Knowledge Hub</a>
+            <a href="#" onclick="logout()">Sign Out</a>
+        </div>
+    </div>
+    <div class="nav">
+        ⭐ Q ⬇️ STUDENT ACCESS > Grading
+    </div>
+    <div class="content">
+        <h2>Grading</h2>
+        <p>Here you can view your current grades and detailed assignment scores.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Teacher</th>
+                    <th>Period</th>
+                    <th>Grade</th>
+                    <th>Percentage</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="courseTable">
+                <!-- Courses will be populated here -->
+            </tbody>
+        </table>
+        <div id="mathDetails" class="details">
+            <h3>Math Assignment Details</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Assignment Name</th>
+                        <th>Category</th>
+                        <th>Score</th>
+                        <th>Max Score</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody id="mathDetailsTable">
+                    <!-- Math details will be populated here -->
+                </tbody>
+            </table>
+        </div>
+        <div id="scienceDetails" class="details">
+            <h3>Science Assignment Details</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Assignment Name</th>
+                        <th>Category</th>
+                        <th>Score</th>
+                        <th>Max Score</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody id="scienceDetailsTable">
+                    <!-- Science details will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        const courseData = [
+            { course: "Math", teacher: "Mr. Smith", period: 1, maxScores: { homework1: 20, quiz1: 50 } },
+            { course: "Science", teacher: "Ms. Johnson", period: 2, maxScores: { labReport1: 30, quiz1: 40 } }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = localStorage.getItem('loggedInUser');
+            const role = localStorage.getItem('userRole');
+            if (!user || role !== 'student') {
+                window.location.href = 'index.html';
+            }
+            document.getElementById('userName').textContent = user || 'Guest';
+
+            const username = getUsernameFromName(user);
+            displayGrades(username);
+        });
+
+        function getUsernameFromName(name) {
+            const userMap = {
+                'John Doe': 'john_doe',
+                'Jane Smith': 'jane_smith',
+                'Mike Jones': 'mike_jones'
+            };
+            return userMap[name] || '';
+        }
+
+        function calculateLetterGrade(percentage) {
+            if (percentage >= 90) return 'A';
+            if (percentage >= 80) return 'B+';
+            if (percentage >= 70) return 'B';
+            if (percentage >= 60) return 'C';
+            return 'F';
+        }
+
+        function displayGrades(username) {
+            const gradesData = JSON.parse(localStorage.getItem('gradesData')) || [];
+            const student = gradesData.find(s => s.username === username);
+            const tableBody = document.getElementById('courseTable');
+            tableBody.innerHTML = '';
+
+            if (!student) {
+                tableBody.innerHTML = '<tr><td colspan="6">No grades available.</td></tr>';
+                return;
+            }
+
+            courseData.forEach(course => {
+                const grades = student.grades[course.course.toLowerCase()];
+                const totalScore = grades.reduce((sum, score) => sum + score, 0);
+                const maxTotal = Object.values(course.maxScores).reduce((sum, max) => sum + max, 0);
+                const percentage = (totalScore / maxTotal * 100).toFixed(2);
+                const letterGrade = calculateLetterGrade(percentage);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${course.course}</td>
+                    <td>${course.teacher}</td>
+                    <td>${course.period}</td>
+                    <td>${letterGrade}</td>
+                    <td>${percentage}%</td>
+                    <td><button onclick="toggleDetails('${course.course.toLowerCase()}Details')">View Details</button></td>
+                `;
+                tableBody.appendChild(row);
+
+                const detailsTable = document.getElementById(`${course.course.toLowerCase()}DetailsTable`);
+                detailsTable.innerHTML = '';
+                Object.keys(course.maxScores).forEach((assignment, index) => {
+                    const score = grades[index];
+                    const maxScore = course.maxScores[assignment];
+                    const percentage = ((score / maxScore) * 100).toFixed(2);
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${assignment.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</td>
+                        <td>${assignment.includes('homework') ? 'Homework' : assignment.includes('lab') ? 'Labs' : 'Quizzes'}</td>
+                        <td>${score}</td>
+                        <td>${maxScore}</td>
+                        <td>${percentage}%</td>
+                    `;
+                    detailsTable.appendChild(row);
+                });
+            });
+        }
+
+        function toggleDetails(id) {
+            const details = document.getElementById(id);
+            details.style.display = details.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

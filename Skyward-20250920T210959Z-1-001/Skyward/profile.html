@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile - Skyward Student Access</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            min-height: 100vh;
+            color: #e0e7ff;
+        }
+        .header {
+            background: #1e3a8a;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .header-left a {
+            display: inline-block;
+            padding: 0.25rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .header-left a:hover {
+            background: #2563eb;
+        }
+        .header-left img {
+            width: 50px;
+            margin-right: 1rem;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        .header-right a {
+            color: #93c5fd;
+            margin-left: 1rem;
+            text-decoration: none;
+        }
+        .header-right a:hover {
+            text-decoration: underline;
+        }
+        .nav {
+            background: #2a5298;
+            padding: 0.5rem;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .profile-section {
+            background: #2a5298;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 768px) {
+            .content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <a href="#" onclick="window.location.href='dashboard.html';">
+                <img src="placeholder.jpg" alt="Skyward Logo">
+            </a>
+            <span>Triad High School - 7000</span>
+        </div>
+        <div class="header-right">
+            <span id="userName"></span>
+            <a href="#">🔔 What's New</a>
+            <a href="#">✉️ My Messages</a>
+            <a href="#">✔️ My Tasks</a>
+            <a href="#">❓ Knowledge Hub</a>
+            <a href="#" onclick="localStorage.removeItem('loggedInUser'); window.location.href='index.html';">Sign Out</a>
+        </div>
+    </div>
+    <div class="nav">
+        ⭐ Q ⬇️ STUDENT ACCESS > Student Profile
+    </div>
+    <div class="content">
+        <div class="profile-section">
+            <h2>Student Information</h2>
+            <div class="profile-details" id="studentInfo">
+                <p><strong>Name:</strong> <span id="studentName"></span></p>
+                <p><strong>Student ID:</strong> 12345</p>
+                <p><strong>Grade:</strong> 11</p>
+                <p><strong>Date of Birth:</strong> 01/15/2010</p>
+                <p><strong>Address:</strong> 123 Main St, Troy, IL 62294</p>
+                <p><strong>Phone:</strong> (618) 555-1234</p>
+                <p><strong>Email:</strong> student@example.com</p>
+            </div>
+        </div>
+        <div class="profile-section">
+            <h2>Emergency Contacts</h2>
+            <div class="profile-details">
+                <p><strong>Contact 1:</strong> John Doe (Father) - (618) 555-5678</p>
+                <p><strong>Contact 2:</strong> Jane Doe (Mother) - (618) 555-9012</p>
+            </div>
+        </div>
+        <div class="profile-section">
+            <h2>Demographic Information</h2>
+            <div class="profile-details">
+                <p><strong>Gender:</strong> Male</p>
+                <p><strong>Ethnicity:</strong> Not Specified</p>
+                <p><strong>Last Updated:</strong> 08/01/2025</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('userName').textContent = localStorage.getItem('loggedInUser') || 'Guest';
+        const userName = localStorage.getItem('loggedInUser');
+        const studentNames = {
+            'John Doe': 'John Doe',
+            'Jane Smith': 'Jane Smith',
+            'Mike Jones': 'Mike Jones'
+        };
+        document.getElementById('studentName').textContent = studentNames[userName] || 'Guest';
+    </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Skyward Student Access</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            min-height: 100vh;
+            color: #e0e7ff;
+        }
+        .header {
+            background: #1e3a8a;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .header-left a {
+            display: inline-block;
+            padding: 0.25rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .header-left a:hover {
+            background: #2563eb;
+        }
+        .header-left img {
+            width: 50px;
+            margin-right: 1rem;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        .header-right a {
+            color: #93c5fd;
+            margin-left: 1rem;
+            text-decoration: none;
+        }
+        .header-right a:hover {
+            text-decoration: underline;
+        }
+        .nav {
+            background: #2a5298;
+            padding: 0.5rem;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .content {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .welcome {
+            background: #2a5298;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .tiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .tile {
+            background: #2a5298;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .tile:hover {
+            transform: translateY(-5px);
+        }
+        .tile a {
+            color: #93c5fd;
+            text-decoration: none;
+            font-size: 1.1rem;
+        }
+        .tile a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .content {
+                padding: 1rem;
+            }
+            .tiles {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <a href="#" onclick="window.location.href='dashboard.html';">
+                <img src="placeholder.jpg" alt="Skyward Logo">
+            </a>
+            <span>Triad High School - 7000</span>
+        </div>
+        <div class="header-right">
+            <span id="userName"></span>
+            <a href="#">🔔 What's New</a>
+            <a href="#">✉️ My Messages</a>
+            <a href="#">✔️ My Tasks</a>
+            <a href="#">❓ Knowledge Hub</a>
+            <a href="#" onclick="localStorage.removeItem('loggedInUser'); window.location.href='index.html';">Sign Out</a>
+        </div>
+    </div>
+    <div class="nav">
+        ⭐ Q ⬇️ STUDENT ACCESS > Dashboard
+    </div>
+    <div class="content">
+        <div class="welcome">
+            <h2>Welcome, <span id="welcomeName"></span>!</h2>
+            <p>Today is Saturday, September 20, 2025, 11:34 AM CDT</p>
+        </div>
+        <div class="tiles">
+            <div class="tile"><a href="grading.html">Grading</a></div>
+            <div class="tile"><a href="schedule.html">Schedule</a></div>
+            <div class="tile"><a href="assignments.html">Assignments</a></div>
+            <div class="tile"><a href="calendar.html">Calendar</a></div>
+            <div class="tile"><a href="activities.html">Activities</a></div>
+            <div class="tile"><a href="discipline.html">Discipline</a></div>
+            <div class="tile"><a href="fees.html">Fees & Payments</a></div>
+            <div class="tile"><a href="profile.html">Profile</a></div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('userName').textContent = localStorage.getItem('loggedInUser') || 'Guest';
+        document.getElementById('welcomeName').textContent = localStorage.getItem('loggedInUser') || 'Guest';
+    </script>
+</body>
+</html>
