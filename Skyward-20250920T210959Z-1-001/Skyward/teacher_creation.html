@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Teacher Account</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Panel - Create Teacher Account</h1>
+        <nav>
+            <a href="admin_dashboard.html">Dashboard</a>
+            <a href="logout.html">Logout</a>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>New Teacher Account</h2>
+            <form id="create-teacher-form" method="POST" action="api/create_teacher.php">
+                <label for="teacher-name">Full Name:</label>
+                <input type="text" id="teacher-name" name="teacher_name" required>
+
+                <label for="teacher-email">Email:</label>
+                <input type="email" id="teacher-email" name="teacher_email" required>
+
+                <label for="teacher-username">Username:</label>
+                <input type="text" id="teacher-username" name="teacher_username" required>
+
+                <label for="teacher-password">Password:</label>
+                <input type="password" id="teacher-password" name="teacher_password" required>
+
+                <button type="submit">Create Account</button>
+            </form>
+            <div id="result-message"></div>
+        </section>
+    </main>
+    <script>
+        // Basic AJAX form submission for better UX
+        document.getElementById('create-teacher-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const data = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: data
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById('result-message').textContent = result.message;
+                if(result.success) form.reset();
+            })
+            .catch(() => {
+                document.getElementById('result-message').textContent = "Error creating account.";
+            });
+        });
+    </script>
+</body>
+</html>
