@@ -81,3 +81,9 @@
     </script>
 </body>
 </html>
+
+<?php
+header('Content-Type: application/json');
+// ... handle input, create teacher ...
+echo json_encode(['success' => true, 'message' => 'Teacher created']);
+?>
