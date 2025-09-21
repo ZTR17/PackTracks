@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyward - Triad CUSD 2 Role Selection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #e0e7ff;
+        }
+        .container {
+            background: #1e3a8a;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .logo img {
+            width: 150px;
+            margin-bottom: 1rem;
+        }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .button-group button {
+            padding: 0.75rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .button-group button:hover {
+            background: #2563eb;
+        }
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #a3bffa;
+        }
+        .footer img {
+            width: 100px;
+            vertical-align: middle;
+        }
+        @media (max-width: 480px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            .logo img {
+                width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="placeholder.jpg" alt="Triad Marine Troy St. Jacob Logo">
+            <h2>Triad CUSD 2</h2>
+        </div>
+        <div class="button-group">
+            <h3>Select Your Role</h3>
+            <button onclick="window.location.href='login.html?role=student'">Student</button>
+            <button onclick="window.location.href='login.html?role=teacher'">Teacher</button>
+            <button onclick="window.location.href='login.html?role=admin'">Admin</button>
+        </div>
+    </div>
+    <div class="footer">
+        <img src="placeholder.jpg" alt="Skyward">
+        <p>Version: 1.296.10.14103</p>
+    </div>
+</body>
+</html>
