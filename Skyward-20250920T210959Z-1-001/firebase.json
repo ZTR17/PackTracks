@@ -1,0 +1,28 @@
+{
+  "apphosting": [
+    {
+      "backendId": "packtracks",
+      "rootDir": "F:\\Skyward2.0\\Skyward-20250920T210959Z-1-001",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "functions"
+      ],
+      "alwaysDeployFromSource": true
+    },
+    {
+      "backendId": "packtracks",
+      "rootDir": "/",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "functions"
+      ],
+      "alwaysDeployFromSource": true
+    }
+  ]
+}

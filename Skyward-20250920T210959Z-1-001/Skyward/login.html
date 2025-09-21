@@ -18,15 +18,27 @@
     .or div{height:1px;background:rgba(255,255,255,.06);flex:1}
   </style>
 
-  <!-- Using modular Firebase SDK (v9) -->
   <script type="module">
-    // Import only what we need from CDN (modular)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
-    import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signInWithPopup,
+      GoogleAuthProvider,
+      onAuthStateChanged,
+      createUserWithEmailAndPassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-    // Firebase config (from your prompt) — fits here
+    // your firebaseConfig (from prompt)
     const firebaseConfig = {
       apiKey: "AIzaSyDCfHNOVVKam-5F3cALbyfOM65NY_8wP6U",
       authDomain: "skyward-redesign.firebaseapp.com",
@@ -43,7 +55,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // DOM refs available after the document loads
+    // DOM ready
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const expectedRole = (urlParams.get('role') || 'student').toLowerCase();
@@ -57,7 +69,6 @@
       function showMsg(t, err = true) { msgEl.textContent = t; msgEl.style.color = err ? '#ffb3b3' : '#bfffc4'; }
 
       async function onSignedInRedirect(user) {
-        // get user profile doc from Firestore
         const userDocRef = doc(db, 'users', user.uid);
         const snapshot = await getDoc(userDocRef);
         if (!snapshot.exists()) {
@@ -73,7 +84,6 @@
         }
         localStorage.setItem('skyward_user', snapshot.data().displayName || user.email);
         localStorage.setItem('skyward_role', role);
-        // Redirect by role
         if (role === 'admin') window.location.href = 'admin_dashboard.html';
         else if (role === 'teacher') window.location.href = 'teacher_dashboard.html';
         else window.location.href = 'dashboard.html';
@@ -105,7 +115,7 @@
         try {
           const result = await signInWithPopup(auth, provider);
           // If new user, create profile doc with default role 'student'
-          if (result && result._tokenResponse && result._tokenResponse.isNewUser || (result && result.additionalUserInfo && result.additionalUserInfo.isNewUser)) {
+          if (result && (result._tokenResponse?.isNewUser || result.additionalUserInfo?.isNewUser)) {
             const u = result.user;
             await setDoc(doc(db, 'users', u.uid), {
               displayName: u.displayName || u.email,
