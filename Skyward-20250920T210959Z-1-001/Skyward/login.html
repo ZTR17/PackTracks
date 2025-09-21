@@ -37,6 +37,7 @@
       setDoc,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-functions.js";
 
     // your firebaseConfig (from prompt)
     const firebaseConfig = {
@@ -54,6 +55,7 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
     const db = getFirestore(app);
+    const functions = getFunctions(app);
 
     // DOM ready
     window.addEventListener('DOMContentLoaded', () => {
@@ -151,6 +153,50 @@
           showMsg(err.message || 'Account creation failed');
         }
       });
+
+      document.getElementById('forgotLink').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('forgotFlow').style.display = 'block';
+      });
+
+      document.getElementById('sendCodeBtn').addEventListener('click', async () => {
+        const email = document.getElementById('fpEmail').value.trim();
+        const sendMsg = document.getElementById('sendMsg');
+        sendMsg.textContent = 'Processing...';
+        try {
+          const fn = httpsCallable(functions, 'sendResetCode');
+          const res = await fn({ email });
+          sendMsg.textContent = res.data && res.data.success ? 'Code sent. Check your email.' : 'Request acknowledged.';
+          document.getElementById('verifySection').style.display = 'block';
+        } catch (err) {
+          console.error(err);
+          sendMsg.textContent = err?.message || 'Failed to send code';
+        }
+      });
+
+      document.getElementById('verifyBtn').addEventListener('click', async () => {
+        const email = document.getElementById('fpEmail').value.trim();
+        const code = document.getElementById('fpCode').value.trim();
+        const newPassword = document.getElementById('fpNewPass').value;
+        const verifyMsg = document.getElementById('verifyMsg');
+        verifyMsg.textContent = 'Verifying...';
+        try {
+          const fn = httpsCallable(functions, 'verifyResetCode');
+          const res = await fn({ email, code, newPassword });
+          if (res.data && res.data.success) {
+            verifyMsg.textContent = 'Password updated. You can now sign in.';
+            // hide UI after short delay
+            setTimeout(() => {
+              document.getElementById('forgotFlow').style.display = 'none';
+            }, 1500);
+          } else {
+            verifyMsg.textContent = 'Unexpected response';
+          }
+        } catch (err) {
+          console.error(err);
+          verifyMsg.textContent = err?.message || 'Verification failed';
+        }
+      });
     });
   </script>
 </head>
@@ -166,6 +212,22 @@
       <div class="or"><div></div><div class="small">OR</div><div></div></div>
       <button id="googleBtn" type="button">Sign in with Google</button>
       <p class="small">Need an account? <a id="signupLink" href="#" style="color:#bfe1ff">Create one</a></p>
+
+      <div id="forgot-area" style="margin-top:12px">
+        <a href="#" id="forgotLink" style="color:#bfe1ff">Forgot password?</a>
+        <div id="forgotFlow" style="display:none; margin-top:8px">
+          <input id="fpEmail" type="email" placeholder="Email for reset" />
+          <button id="sendCodeBtn" type="button">Send code</button>
+          <div id="sendMsg" class="small"></div>
+
+          <div id="verifySection" style="display:none; margin-top:8px">
+            <input id="fpCode" type="text" placeholder="6-digit code" maxlength="6" />
+            <input id="fpNewPass" type="password" placeholder="New password (min 8 chars)" />
+            <button id="verifyBtn" type="button">Verify & Set Password</button>
+            <div id="verifyMsg" class="small"></div>
+          </div>
+        </div>
+      </div>
     </form>
   </div>
 </body>
