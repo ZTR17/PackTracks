@@ -1,4 +1,13 @@
 {
+  "hosting": {
+    "public": "Skyward",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "cleanUrls": true
+  },
   "apphosting": [
     {
       "backendId": "packtracks",
