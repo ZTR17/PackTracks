@@ -14,7 +14,7 @@
     },
     {
       "backendId": "packtracks",
-      "rootDir": "/",
+      "rootDir": "F:\\Skyward2.0\\Skyward-20250920T210959Z-1-001",
       "ignore": [
         "node_modules",
         ".git",
